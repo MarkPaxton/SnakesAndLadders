@@ -1,4 +1,4 @@
-package uk.gov.hmrc.snakes_and_ladders
+package uk.gov.sample.snakes_and_ladders.config
 
 import java.io.File
 
@@ -31,7 +31,7 @@ object FrontendGlobal
   }
 
   override def standardErrorTemplate(pageTitle: String, heading: String, message: String)(implicit rh: Request[_]): Html =
-    uk.gov.hmrc.snakes_and_ladders.views.html.error_template(pageTitle, heading, message)
+    uk.gov.sample.snakes_and_ladders.views.html.error_template(pageTitle, heading, message)
 
   override def microserviceMetricsConfig(implicit app: Application): Option[Configuration] = app.configuration.getConfig(s"microservice.metrics")
 }

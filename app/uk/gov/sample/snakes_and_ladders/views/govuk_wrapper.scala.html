@@ -1,4 +1,4 @@
-@(appConfig: uk.gov.hmrc.snakes_and_ladders.AppConfig,
+@(appConfig: uk.gov.sample.snakes_and_ladders.config.AppConfig,
   title: String,
   mainClass: Option[String] = None,
   mainDataAttributes: Option[Html] = None,
@@ -60,8 +60,6 @@
     }
 }
 
-@getHelpForm = @{uiHelpers.reportAProblemLink(appConfig.reportAProblemPartialUrl, appConfig.reportAProblemNonJSUrl)}
-
 @content = {
     @uiLayouts.main_content(
       article = mainContent,
@@ -69,7 +67,6 @@
       mainDataAttributes = mainDataAttributes,
       mainContentHeader = mainContentHeader,
       serviceInfo = serviceInfo,
-      getHelpForm = getHelpForm,
       sidebar = sidebar)
 }
 

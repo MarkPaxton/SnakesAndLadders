@@ -1,4 +1,4 @@
-package uk.gov.hmrc.snakes_and_ladders
+package uk.gov.sample.snakes_and_ladders.config
 
 import uk.gov.hmrc.play.audit.http.config.LoadAuditingConfig
 import uk.gov.hmrc.play.audit.http.connector.{AuditConnector => Auditing}
