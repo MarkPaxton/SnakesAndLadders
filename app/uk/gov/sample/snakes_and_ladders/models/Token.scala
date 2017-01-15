@@ -12,3 +12,9 @@ case class Token(square: Int) {
     }
   }
 }
+
+object Token {
+  def apply(): Token = {
+    Token(0)
+  }
+}

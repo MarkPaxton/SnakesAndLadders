@@ -1,3 +1,6 @@
 # microservice specific routes
 
-GET        /            uk.gov.sample.snakes_and_ladders.controllers.SnakesAndLaddersController.start()
+GET        /            uk.gov.sample.snakes_and_ladders.controllers.SnakesAndLaddersController.game_index()
+GET       /start        uk.gov.sample.snakes_and_ladders.controllers.SnakesAndLaddersController.game_start(players:Int)
+GET       /roll         uk.gov.sample.snakes_and_ladders.controllers.SnakesAndLaddersController.roll()
+GET       /move         uk.gov.sample.snakes_and_ladders.controllers.SnakesAndLaddersController.move(distance:Int)

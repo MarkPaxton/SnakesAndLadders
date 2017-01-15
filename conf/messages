@@ -1,1 +1,10 @@
 app.title=Snakes and Ladders
+
+start.link=Start game with {0} players
+
+
+game.token.status=Token {0} is on square {1}
+game.roll-dice=Player {0}, roll dice
+game.dice-roll=You have rolled {0}
+game.move=Move player {0} by {1}
+game.your-turn=Your turn

@@ -1,0 +1,22 @@
+@import uk.gov.sample.snakes_and_ladders.models.Game
+@(game:Game, diceRoll:Option[Int])(implicit request: Request[_], messages: Messages)
+@import uk.gov.sample.snakes_and_ladders.controllers.routes
+@uk.gov.sample.snakes_and_ladders.views.html.main_template(
+    title = Messages("app.title")
+) {
+    <h1>@Messages("app.title")</h1>
+    @diceRoll.map { roll =>
+        <p>@Messages("game.dice-roll", roll)</p>
+        <p><a href="@routes.SnakesAndLaddersController.move(roll)">@Messages("game.move", game.currentToken, roll)</a></p>
+    }
+    <ul>
+    @game.tokens.zipWithIndex.map { p =>
+        <li>@Messages("game.token.status", p._2 + 1, p._1.square) @if(p._2 + 1 == game.currentToken) {<strong>@Messages("game.your-turn")}</strong></li>
+    }
+    @if(diceRoll.isEmpty) {
+        <p><a href="@routes.SnakesAndLaddersController.roll()">@Messages("game.roll-dice", game.currentToken)</a></p>
+    }
+}
+
+
+

@@ -1,0 +1,16 @@
+@(title: String,
+  contentHeader: Option[Html] = None,
+  bodyClasses: Option[String] = None,
+  mainClass: Option[String] = None,
+  scriptElem: Option[Html] = None)(mainContent: Html)(implicit request : Request[_], messages: Messages)
+
+@import uk.gov.hmrc.play.views.html.layouts.article
+
+@uk.gov.sample.snakes_and_ladders.views.html.govuk_wrapper(appConfig = uk.gov.sample.snakes_and_ladders.config.SnakesAndLaddersAppConfig,
+               title = title,
+               mainClass = mainClass,
+               bodyClasses = bodyClasses,
+               contentHeader = contentHeader,
+               mainContent = article(mainContent),
+               scriptElem = scriptElem
+)
