@@ -7,7 +7,7 @@ import scala.concurrent.Future
 import play.api.Play.current
 import play.api.i18n.Messages.Implicits._
 import uk.gov.hmrc.selfservicetimetopay.util.JacksonMapper
-import uk.gov.sample.snakes_and_ladders.views.html.game.{game, index}
+import uk.gov.sample.snakes_and_ladders.views.html.game.{game, index, winner}
 import uk.gov.sample.snakes_and_ladders.models._
 import scala.util.control.Exception.catching
 
@@ -43,9 +43,11 @@ trait SnakesAndLaddersController extends FrontendController {
     }
     Future.successful(gameOption.fold(Redirect(routes.SnakesAndLaddersController.game_index())) { currentGame =>
       val nextGame = currentGame.moveCurrentToken(distance)
-      Ok(game(nextGame, Some(currentGame.rollDice))).addingToSession(
+      nextGame.winner.fold(Ok(game(nextGame, None)).addingToSession(
         "game" -> JacksonMapper.writeValueAsString(nextGame)
-      )
+      )){ i =>
+        Ok(winner(nextGame, currentGame.currentToken))
+      }
     })
   }
 }

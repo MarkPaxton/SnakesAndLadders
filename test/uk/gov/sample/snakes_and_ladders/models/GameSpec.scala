@@ -51,6 +51,28 @@ class GameSpec extends UnitSpec with MockitoSugar  {
       game.currentToken shouldBe 2
     }
 
+    "be won when token on square 97 moves 3 squares" in {
+      var game = Game(Board(100, Seq.empty), Seq.fill(2)(Token(0)), 0).start
+      game.currentToken shouldBe 1
+      game = game.moveCurrentToken(96)
+      game = game.moveCurrentToken(9)
+      game.tokens(0).square shouldBe 97
+      game.tokens(1).square shouldBe 10
+      game = game.moveCurrentToken(3)
+      game.tokens(0).square shouldBe 100
+      game.winner.get shouldBe 1
+    }
+
+    "not be won when token on square 97 can't move 4 squares" in {
+      var game = Game(Board(100, Seq.empty), Seq(Token(0)), 0).start
+      game.currentToken shouldBe 1
+      game = game.moveCurrentToken(96)
+      game.tokens(0).square shouldBe 97
+      game = game.moveCurrentToken(4)
+      game.tokens(0).square shouldBe 97
+      game.winner shouldBe None
+    }
+
   }
 
 

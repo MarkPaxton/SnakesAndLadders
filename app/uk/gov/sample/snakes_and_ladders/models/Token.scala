@@ -5,7 +5,7 @@ package uk.gov.sample.snakes_and_ladders.models
   */
 case class Token(square: Int) {
   def moveOnBoard(board:Board, distance:Int):Token = {
-    if(board.size>square+distance) {
+    if(board.size>=square+distance) {
       return copy(square+distance)
     } else {
       return copy()

@@ -18,4 +18,11 @@ case class Game(board:Board, tokens:Seq[Token], currentToken: Int) {
     val newTokens = tokens.patch(currentToken-1, Seq(tokens(currentToken-1).moveOnBoard(board, distance)), 1)
     return copy(tokens = newTokens, currentToken = (currentToken % tokens.length)+1)
   }
+
+  def winner: Option[Int] = {
+    return tokens.filter(_.square==board.size) match {
+      case Seq(finished:Token, _*) => Some(tokens.indexOf(finished)+1)
+      case Seq() => None
+    }
+  }
 }

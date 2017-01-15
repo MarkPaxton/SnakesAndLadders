@@ -8,3 +8,6 @@ game.roll-dice=Player {0}, roll dice
 game.dice-roll=You have rolled {0}
 game.move=Move player {0} by {1}
 game.your-turn=Your turn
+game.winner=You are the winner!
+game.winner.message=Congratulations player {0}, you have won
+game.restart=Play another game...

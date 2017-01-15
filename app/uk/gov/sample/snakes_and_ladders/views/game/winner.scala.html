@@ -1,0 +1,16 @@
+@import uk.gov.sample.snakes_and_ladders.models.Game
+@(game:Game, winner:Int)(implicit request: Request[_], messages: Messages)
+@import uk.gov.sample.snakes_and_ladders.controllers.routes
+@uk.gov.sample.snakes_and_ladders.views.html.main_template(
+    title = Messages("app.title")
+) {
+    <h1>@Messages("app.title")</h1>
+    <h2>@Messages("game.winner")</h2>
+    <h3>@Messages("game.winner.message", winner)</h3>
+    <ul>
+    @game.tokens.zipWithIndex.map { p =>
+        <li>@Messages("game.token.status", p._2 + 1, p._1.square)</li>
+    }
+    </ul>
+    <p><a href="@routes.SnakesAndLaddersController.game_index()">@Messages("game.restart")</a></p>
+}
