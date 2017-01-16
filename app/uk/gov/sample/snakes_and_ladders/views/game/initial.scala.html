@@ -1,5 +1,5 @@
 @import uk.gov.sample.snakes_and_ladders.models.Game
-@(rolls:Seq[Int])(implicit request: Request[_], messages: Messages)
+@(game:Game, rolls:Seq[Int])(implicit request: Request[_], messages: Messages)
 @import uk.gov.sample.snakes_and_ladders.controllers.routes
 @uk.gov.sample.snakes_and_ladders.views.html.main_template(
     title = Messages("app.title")
@@ -14,7 +14,7 @@
     @if(rolls.filter(_ == 0).isEmpty) {
         @if(rolls.filter(_ ==rolls.max).length>1){
             <p><strong>@Messages("initial.draw")</strong></p>
-            <p><a href="@routes.SnakesAndLaddersController.init_game(rolls.length)">@Messages("initial.roll-again")</a></p>
+            <p><a href="@routes.SnakesAndLaddersController.init_game(game.tokens.count(!_.robot), game.tokens.count(_.robot))">@Messages("initial.roll-again")</a></p>
         } else {
             <p><strong>@Messages("initial.player", rolls.zipWithIndex.maxBy(_._1)._2 + 1) @Messages("initial.goes-first") </strong></p>
             <p><a href="@routes.SnakesAndLaddersController.game_start()">@Messages("initial.start")</a></p>

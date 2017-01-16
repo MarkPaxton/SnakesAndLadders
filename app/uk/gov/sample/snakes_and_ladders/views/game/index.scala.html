@@ -5,8 +5,12 @@
     title = Messages("app.title")
 ) {
     <h1>@Messages("app.title")</h1>
+    <ul>
+        <li><a href="@routes.SnakesAndLaddersController.init_game(2, 0)">@Messages("start.link", 2, 0)</a></li>
+        <li><a href="@routes.SnakesAndLaddersController.init_game(2, 1)">@Messages("start.link", 2, 1)</a></li>
+    </ul>
 
-    <a href="@routes.SnakesAndLaddersController.init_game(2)">@Messages("start.link", 2)</a>
+
 }
 
 

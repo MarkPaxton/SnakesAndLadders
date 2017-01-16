@@ -3,7 +3,7 @@ package uk.gov.sample.snakes_and_ladders.models
 /**
   * Created by mark on 14/01/17.
   */
-case class Token(square: Int) {
+case class Token(square: Int, robot:Boolean) {
   def moveOnBoard(board:Board, distance:Int):Token = {
     if(board.size>=square+distance) {
       var newSquare = square+distance
@@ -20,6 +20,10 @@ case class Token(square: Int) {
 
 object Token {
   def apply(): Token = {
-    Token(0)
+    Token(0, false)
+  }
+
+  def apply(robot:Boolean): Token = {
+    Token(0, robot)
   }
 }

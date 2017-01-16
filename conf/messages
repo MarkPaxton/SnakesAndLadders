@@ -1,6 +1,6 @@
 app.title=Snakes and Ladders
 
-start.link=Start game with {0} players
+start.link=Start game with {0} players and {1} computer players
 
 initial.title=Decide who goes first
 initial.player=Player {0}

@@ -19,13 +19,13 @@ trait SnakesAndLaddersController extends FrontendController {
     Future.successful(Ok(index()))
   }
 
-  val init_game = (players:Int) => Action.async { implicit request =>
+  val init_game = (players:Int, robots:Int) => Action.async { implicit request =>
     var board = Board()
     for(i <- 1 to 5) { board = board.withLadder().withSnake() }
-    var game = Game(board,  Seq.fill(players)(Token(0)), 0)
-    var initialRolls:Seq[Int] = Seq.fill(players)(0)
+    var game = Game(board,  Seq.fill(players)(Token()) ++ Seq.fill(robots)(Token(true)), 0)
+    var initialRolls:Seq[Int] = Seq.fill(players)(0) ++ Seq.tabulate(robots){_ => game.rollDice}
 
-    Future.successful(Ok(initial(initialRolls)).withNewSession.addingToSession(
+    Future.successful(Ok(initial(game, initialRolls)).withNewSession.addingToSession(
       "game" -> JacksonMapper.writeValueAsString(game),
       "initial_rolls" -> JacksonMapper.writeValueAsString(initialRolls)
     ))
@@ -43,7 +43,7 @@ trait SnakesAndLaddersController extends FrontendController {
       case (Some(game: Game), Some(rolls: Seq[Int])) => {
         val rollTurn = rolls.indexWhere(_==0)
         val newRolls = rolls.patch(rollTurn, Seq(game.rollDice), 1)
-        Ok(initial(newRolls)).addingToSession(
+        Ok(initial(game, newRolls)).addingToSession(
           "game" -> JacksonMapper.writeValueAsString(game),
           "initial_rolls" -> JacksonMapper.writeValueAsString(newRolls)
         )
@@ -83,7 +83,11 @@ trait SnakesAndLaddersController extends FrontendController {
       catching(classOf[Exception]) opt JacksonMapper.readValue(gameJson, classOf[Game])
     }
     Future.successful(gameOption.fold(Redirect(routes.SnakesAndLaddersController.game_index())) { currentGame =>
-      val nextGame = currentGame.moveCurrentToken(distance)
+      var nextGame = currentGame.moveCurrentToken(distance)
+      //If this is a robot player, then just do the move
+      if(nextGame.tokens(nextGame.currentToken-1).robot) {
+        nextGame = nextGame.moveCurrentToken(nextGame.rollDice)
+      }
       nextGame.winner.fold(Ok(game(nextGame, None)).addingToSession(
         "game" -> JacksonMapper.writeValueAsString(nextGame)
       )){ i =>
