@@ -1,0 +1,31 @@
+@import uk.gov.sample.snakes_and_ladders.models.Game
+@(rolls:Seq[Int])(implicit request: Request[_], messages: Messages)
+@import uk.gov.sample.snakes_and_ladders.controllers.routes
+@uk.gov.sample.snakes_and_ladders.views.html.main_template(
+    title = Messages("app.title")
+) {
+    <h1>@Messages("app.title")</h1>
+    <h2>@Messages("initial.title")</h2>
+    <ul>
+    @rolls.zipWithIndex.map { r =>
+        <li>@Messages("initial.player", r._2+1) @if(r._1 == 0){@Messages("initial.not-rolled")}else{@Messages("initial.rolled", r._1)}</li>
+    }
+    </ul>
+    @if(rolls.filter(_ == 0).isEmpty) {
+        @if(rolls.filter(_ ==rolls.max).length>1){
+            <p><strong>@Messages("initial.draw")</strong></p>
+            <p><a href="@routes.SnakesAndLaddersController.init_game(rolls.length)">@Messages("initial.roll-again")</a></p>
+        } else {
+            <p><strong>@Messages("initial.player", rolls.zipWithIndex.maxBy(_._1)._2 + 1) @Messages("initial.goes-first") </strong></p>
+            <p><a href="@routes.SnakesAndLaddersController.game_start()">@Messages("initial.start")</a></p>
+        }
+    }else {
+        <p>@Messages("initial.player", rolls.indexWhere(_==0)+1)
+            <a href="@routes.SnakesAndLaddersController.who_starts()">
+         @Messages("initial.roll")
+        </a></p>
+    }
+}
+
+
+

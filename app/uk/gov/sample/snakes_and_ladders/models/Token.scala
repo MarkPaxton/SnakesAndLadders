@@ -6,7 +6,12 @@ package uk.gov.sample.snakes_and_ladders.models
 case class Token(square: Int) {
   def moveOnBoard(board:Board, distance:Int):Token = {
     if(board.size>=square+distance) {
-      return copy(square+distance)
+      var newSquare = square+distance
+      val squareContents = board.contents.filter(_.start==newSquare)
+      if (squareContents.nonEmpty) {
+        newSquare = squareContents.head.end
+      }
+      return copy(newSquare)
     } else {
       return copy()
     }

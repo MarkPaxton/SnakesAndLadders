@@ -6,8 +6,12 @@ package uk.gov.sample.snakes_and_ladders.models
 case class Game(board:Board, tokens:Seq[Token], currentToken: Int) {
   private val random = scala.util.Random
 
-  def start():Game = {
+  def start:Game = {
     return Game(this.board, tokens.map(c => c.copy(1)), 1)
+  }
+
+  def startWith(token:Int):Game = {
+    return Game(this.board, tokens.map(c => c.copy(1)), token)
   }
 
   def rollDice: Int = {

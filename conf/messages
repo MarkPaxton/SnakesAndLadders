@@ -2,7 +2,15 @@ app.title=Snakes and Ladders
 
 start.link=Start game with {0} players
 
-
+initial.title=Decide who goes first
+initial.player=Player {0}
+initial.not-rolled=Has yet to roll
+initial.rolled=Rolled {0}
+initial.roll=roll dice
+initial.start=Start Game
+initial.goes-first=goes first
+initial.draw=It's a draw
+initial.roll-again=Roll again
 game.token.status=Token {0} is on square {1}
 game.roll-dice=Player {0}, roll dice
 game.dice-roll=You have rolled {0}
@@ -11,3 +19,8 @@ game.your-turn=Your turn
 game.winner=You are the winner!
 game.winner.message=Congratulations player {0}, you have won
 game.restart=Play another game...
+
+game.layout=Board layout
+game.snake=Snake
+game.ladder=Ladder
+game.item-at=at {0} going to {1}
