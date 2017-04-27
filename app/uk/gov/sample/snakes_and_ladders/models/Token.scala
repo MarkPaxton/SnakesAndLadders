@@ -1,13 +1,12 @@
 package uk.gov.sample.snakes_and_ladders.models
 
-/**
-  * Created by mark on 14/01/17.
-  */
-case class Token(square: Int, robot:Boolean) {
-  def moveOnBoard(board:Board, distance:Int):Token = {
-    if(board.size>=square+distance) {
-      var newSquare = square+distance
-      val squareContents = board.contents.filter(_.start==newSquare)
+import play.api.libs.json.Json
+
+case class Token(square: Int, robot: Boolean) {
+  def moveOnBoard(board: Board, distance: Int): Token = {
+    if (board.size >= square + distance) {
+      var newSquare = square + distance
+      val squareContents = board.contents.filter(_.start == newSquare)
       if (squareContents.nonEmpty) {
         newSquare = squareContents.head.end
       }
@@ -19,11 +18,13 @@ case class Token(square: Int, robot:Boolean) {
 }
 
 object Token {
+  implicit val format = Json.format[Token]
+
   def apply(): Token = {
     Token(0, false)
   }
 
-  def apply(robot:Boolean): Token = {
+  def apply(robot: Boolean): Token = {
     Token(0, robot)
   }
 }

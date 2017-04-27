@@ -10,11 +10,16 @@ Usage
 -------------
 
 ### Running the application
+
 For demonstration purposes the application can be run with SBT, this presents an HTML Frontend using the HMRC play framework templates. It will look prettier if the Assets Frontend Service is running and providing assets, however it is not required and will function as intended without this service running. If you did want to do this, you should install service manager: https://github.com/hmrc/service-manager
 ```
 sbt run
 ```
-###Running the Tests
+
+http://localhost:9000/snakes-and-ladders/
+
+
+### Running the Tests
 ```
 sbt test
 ```

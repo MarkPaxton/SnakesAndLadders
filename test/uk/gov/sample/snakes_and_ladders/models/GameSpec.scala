@@ -8,20 +8,20 @@ class GameSpec extends UnitSpec with MockitoSugar  {
 
   "Game" should {
     "start with Tokens on square 1" in {
-      val game = Game(mock[Board], Seq.fill(3)(Token(0)), 0)
+      val game = Game(mock[Board], Seq.fill(3)(Token()), 0)
 
       game.start.tokens.filter(_.square==1).size shouldBe 3
     }
 
     "start with token 1's turn" in {
-      val game = Game(mock[Board], Seq.fill(3)(Token(0)), 0)
+      val game = Game(mock[Board], Seq.fill(3)(Token()), 0)
 
       game.start.currentToken shouldBe 1
     }
 
 
     "move current turn around all tokens" in {
-      var game = Game(Board(100, Seq.empty), Seq.fill(4)(Token(0)), 1).start
+      var game = Game(Board(100, Seq.empty), Seq.fill(4)(Token()), 1).start
       game.currentToken shouldBe 1
       game = game.moveCurrentToken(1)
       game.currentToken shouldBe 2
@@ -43,7 +43,7 @@ class GameSpec extends UnitSpec with MockitoSugar  {
     }
 
     "move current token by 4 squares" in {
-      var game = Game(Board(100, Seq.empty), Seq.fill(2)(Token(0)), 0).start
+      var game = Game(Board(100, Seq.empty), Seq.fill(2)(Token()), 0).start
       game.currentToken shouldBe 1
       val turn = game.currentToken
       game = game.moveCurrentToken(4)
@@ -52,7 +52,7 @@ class GameSpec extends UnitSpec with MockitoSugar  {
     }
 
     "be won when token on square 97 moves 3 squares" in {
-      var game = Game(Board(100, Seq.empty), Seq.fill(2)(Token(0)), 0).start
+      var game = Game(Board(100, Seq.empty), Seq.fill(2)(Token()), 0).start
       game.currentToken shouldBe 1
       game = game.moveCurrentToken(96)
       game = game.moveCurrentToken(9)
@@ -64,7 +64,7 @@ class GameSpec extends UnitSpec with MockitoSugar  {
     }
 
     "not be won when token on square 97 can't move 4 squares" in {
-      var game = Game(Board(100, Seq.empty), Seq(Token(0)), 0).start
+      var game = Game(Board(100, Seq.empty), Seq(Token()), 0).start
       game.currentToken shouldBe 1
       game = game.moveCurrentToken(96)
       game.tokens(0).square shouldBe 97

@@ -10,7 +10,6 @@ object FrontendBuild extends Build with MicroService {
   val appName = "snakes_and_ladders"
 
   override lazy val appDependencies: Seq[ModuleID] = compile ++ test()
-  private val jacksonVersion = "2.7.8"
 
   val compile = Seq(
     ws,
@@ -21,11 +20,7 @@ object FrontendBuild extends Build with MicroService {
     "uk.gov.hmrc" %% "logback-json-logger" % "3.1.0",
     "uk.gov.hmrc" %% "govuk-template" % "5.0.0",
     "uk.gov.hmrc" %% "play-health" % "2.0.0",
-    "uk.gov.hmrc" %% "play-ui" % "5.4.0",
-    "com.fasterxml.jackson.core" % "jackson-core" % jacksonVersion,
-    "com.fasterxml.jackson.core" % "jackson-databind" % jacksonVersion,
-    "com.fasterxml.jackson.core" % "jackson-annotations" % jacksonVersion,
-    "com.fasterxml.jackson.module" %% "jackson-module-scala" % jacksonVersion
+    "uk.gov.hmrc" %% "play-ui" % "5.4.0"
   )
 
   def test(scope: String = "test") = Seq(

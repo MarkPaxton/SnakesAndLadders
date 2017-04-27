@@ -1,15 +1,13 @@
 package uk.gov.sample.snakes_and_ladders.controllers
 
-import uk.gov.hmrc.play.frontend.controller.FrontendController
+import play.api.libs.json._
 import play.api.mvc._
-
-import scala.concurrent.Future
+import uk.gov.hmrc.play.frontend.controller.FrontendController
+import uk.gov.sample.snakes_and_ladders.models._
+import uk.gov.sample.snakes_and_ladders.views.html.game._
 import play.api.Play.current
 import play.api.i18n.Messages.Implicits._
-import uk.gov.hmrc.selfservicetimetopay.util.JacksonMapper
-import uk.gov.sample.snakes_and_ladders.views.html.game._
-import uk.gov.sample.snakes_and_ladders.models._
-import scala.util.control.Exception.catching
+import scala.concurrent.Future
 
 object SnakesAndLaddersController extends SnakesAndLaddersController
 
@@ -26,17 +24,17 @@ trait SnakesAndLaddersController extends FrontendController {
     var initialRolls:Seq[Int] = Seq.fill(players)(0) ++ Seq.tabulate(robots){_ => game.rollDice}
 
     Future.successful(Ok(initial(game, initialRolls)).withNewSession.addingToSession(
-      "game" -> JacksonMapper.writeValueAsString(game),
-      "initial_rolls" -> JacksonMapper.writeValueAsString(initialRolls)
+      "game" -> Json.toJson(game).toString,
+      "initial_rolls" -> Json.toJson(initialRolls).toString
     ))
   }
 
   val who_starts = Action.async { implicit request =>
     val rollsOption = request.session.get("initial_rolls").fold[Option[Seq[Int]]](None) { json =>
-      catching(classOf[Exception]) opt JacksonMapper.readValue(json, classOf[Seq[Int]])
+      Json.parse(json).asOpt[Seq[Int]]
     }
     val gameOption = request.session.get("game").fold[Option[Game]](None) { gameJson =>
-      catching(classOf[Exception]) opt JacksonMapper.readValue(gameJson, classOf[Game])
+      Json.parse(gameJson).asOpt[Game]
     }
     Future.successful((gameOption, rollsOption) match {
       // When there's initial rolls in the session then roll for the next player
@@ -44,8 +42,8 @@ trait SnakesAndLaddersController extends FrontendController {
         val rollTurn = rolls.indexWhere(_==0)
         val newRolls = rolls.patch(rollTurn, Seq(game.rollDice), 1)
         Ok(initial(game, newRolls)).addingToSession(
-          "game" -> JacksonMapper.writeValueAsString(game),
-          "initial_rolls" -> JacksonMapper.writeValueAsString(newRolls)
+          "game" -> Json.toJson(game).toString,
+          "initial_rolls" -> Json.toJson(newRolls).toString
         )
       }
       case _ => Redirect(routes.SnakesAndLaddersController.game_index()) //Anything else, go to start
@@ -54,15 +52,15 @@ trait SnakesAndLaddersController extends FrontendController {
 
   val game_start = Action.async { implicit request =>
     val gameOption = request.session.get("game").fold[Option[Game]](None) { gameJson =>
-      catching(classOf[Exception]) opt JacksonMapper.readValue(gameJson, classOf[Game])
+      Json.parse(gameJson).asOpt[Game]
     }
     val rollsOption = request.session.get("initial_rolls").fold[Option[Seq[Int]]](None) { json =>
-      catching(classOf[Exception]) opt JacksonMapper.readValue(json, classOf[Seq[Int]])
+     Json.parse(json).asOpt[Seq[Int]]
     }
     Future.successful(gameOption.fold(Redirect(routes.SnakesAndLaddersController.game_index())){ sessionGame =>
     val currentGame =  rollsOption.fold(sessionGame.start) { rolls => sessionGame.startWith(rolls.zipWithIndex.maxBy(_._1)._2+1)}
       Ok(game(currentGame, None)).addingToSession(
-        "game" -> JacksonMapper.writeValueAsString(currentGame)
+        "game" -> Json.toJson(currentGame).toString
       )
     })
   }
@@ -70,7 +68,7 @@ trait SnakesAndLaddersController extends FrontendController {
 
   val roll = Action.async { implicit request =>
     val gameOption = request.session.get("game").fold[Option[Game]](None) { gameJson =>
-      catching(classOf[Exception]) opt JacksonMapper.readValue(gameJson, classOf[Game])
+      Json.parse(gameJson).asOpt[Game]
     }
     Future.successful(gameOption.fold(Redirect(routes.SnakesAndLaddersController.game_index())) { currentGame =>
       Ok(game(currentGame, Some(currentGame.rollDice)))
@@ -80,7 +78,7 @@ trait SnakesAndLaddersController extends FrontendController {
 
   val move = (distance:Int) => Action.async { implicit request =>
     val gameOption = request.session.get("game").fold[Option[Game]](None) { gameJson =>
-      catching(classOf[Exception]) opt JacksonMapper.readValue(gameJson, classOf[Game])
+      Json.parse(gameJson).asOpt[Game]
     }
     Future.successful(gameOption.fold(Redirect(routes.SnakesAndLaddersController.game_index())) { currentGame =>
       var nextGame = currentGame.moveCurrentToken(distance)
@@ -89,10 +87,11 @@ trait SnakesAndLaddersController extends FrontendController {
         nextGame = nextGame.moveCurrentToken(nextGame.rollDice)
       }
       nextGame.winner.fold(Ok(game(nextGame, None)).addingToSession(
-        "game" -> JacksonMapper.writeValueAsString(nextGame)
+        "game" -> Json.toJson(nextGame).toString
       )){ i =>
         Ok(winner(nextGame, currentGame.currentToken))
       }
     })
   }
+
 }
